@@ -1,10 +1,11 @@
 import java.util.HashMap;
 
-class Vending {
-    private static HashMap<String, Item> Stock = new HashMap<String,Item>();
+class Vendor {
+    private HashMap<String, Item> Stock;
     private double balance;
 
-    Vending(int numCandy, int numGum) {
+    Vendor(int numCandy, int numGum) {
+        Stock = new HashMap<String,Item>();
         Stock.put("Candy", new Item(1.25, numCandy));
         Stock.put("Gum", new Item(.5, numGum));
         this.balance = 0;
@@ -25,14 +26,15 @@ class Vending {
     void select(String name) {
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
-            if (balance >= item.price) {
+            double currentPrice = item.getCurrentPrice();
+            if (balance >= currentPrice) {
                 item.purchase(1);
-                this.balance = this.balance - item.price;
+                this.balance = this.balance - currentPrice;
             }
             else
-                System.out.println("Gimme more money");
+                System.out.println("Insufficient funds");
         }
-        else System.out.println("Sorry, don't know that item");
+        else System.out.println("Item not found");
     }
 
     void emptyInventory() {
@@ -47,20 +49,39 @@ class Vending {
     }
 
     void restockItem(String name, double price, int amount) {
+        restockItem(name, price, amount, "");
+    }
+
+    void restockItem(String name, double price, int amount, String description) {
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
             item.restock(amount);
         } else {
-            Stock.put(name, new Item(price, amount));
+            Stock.put(name, new Item(price, amount, description));
         }
     }
 
-    // Added method to rename items
     void renameItem(String oldName, String newName) {
         if (Stock.containsKey(oldName)) {
             Item item = Stock.get(oldName);
             Stock.remove(oldName);
             Stock.put(newName, item);
+        }
+    }
+
+    void removeItem(String name) {
+        Stock.remove(name);
+    }
+
+    void applyDiscount(String name, double percentage) {
+        if (Stock.containsKey(name)) {
+            Stock.get(name).setDiscount(percentage);
+        }
+    }
+
+    void markAsBestseller(String name, boolean status) {
+        if (Stock.containsKey(name)) {
+            Stock.get(name).setBestseller(status);
         }
     }
 

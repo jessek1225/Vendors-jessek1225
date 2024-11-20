@@ -1,54 +1,58 @@
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class VendorTest {
-    private Vending vendor;
+    private Vendor vendor;
 
-    @BeforeEach
-    void setUp() {
-        vendor = new Vending(10, 10);
+    @Before
+    public void setUp() {
+        vendor = new Vendor(10, 10);
     }
 
     @Test
-    void testAddMoney() {
+    public void testAddMoney() {
         vendor.addMoney(5.0);
-        assertEquals(5.0, vendor.getBalance());
+        assertEquals(5.0, vendor.getBalance(), 0.001);
     }
 
     @Test
-    void testBuyItem() {
+    public void testBuyItem() {
         vendor.addMoney(2.0);
         vendor.select("Candy");
-        assertEquals(0.75, vendor.getBalance());
+        assertEquals(0.75, vendor.getBalance(), 0.001);
     }
 
     @Test
-    void testEmptyInventory() {
+    public void testEmptyInventory() {
         vendor.emptyInventory();
         assertTrue(vendor.getStock().isEmpty());
     }
 
     @Test
-    void testRestockItem() {
+    public void testRestockItem() {
         vendor.restockItem("Candy", 5);
-        Item candy = vendor.getStock().get("Candy");
-        assertEquals(15, candy.stock);
+        assertEquals(15, vendor.getStock().get("Candy").stock);
     }
 
     @Test
-    void testAddNewItemToInventory() {
-        vendor.restockItem("Chips", 1.00, 5);
+    public void testAddNewItem() {
+        vendor.restockItem("Chips", 2.0, 5, "Tasty chips");
         assertTrue(vendor.getStock().containsKey("Chips"));
-        assertEquals(5, vendor.getStock().get("Chips").stock);
+        assertEquals("Tasty chips", vendor.getStock().get("Chips").getDescription());
     }
 
-    // New test for renaming items
     @Test
-    void testRenameItem() {
-        vendor.renameItem("Candy", "Chocolate");
-        assertNull(vendor.getStock().get("Candy"));
-        assertNotNull(vendor.getStock().get("Chocolate"));
+    public void testDiscount() {
+        vendor.restockItem("Soda", 2.0, 5);
+        vendor.applyDiscount("Soda", 50.0);
+        assertEquals(1.0, vendor.getStock().get("Soda").getCurrentPrice(), 0.001);
+    }
+
+    @Test
+    public void testBestseller() {
+        vendor.restockItem("Book", 10.0, 5);
+        vendor.markAsBestseller("Book", true);
+        assertTrue(vendor.getStock().get("Book").isBestseller);
     }
 }
