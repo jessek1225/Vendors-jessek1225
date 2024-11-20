@@ -1,4 +1,4 @@
-// VendorTest.java
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +8,7 @@ public class VendorTest {
 
     @BeforeEach
     void setUp() {
-        vendor = new Vending(10, 10);  // Start with 10 candy and 10 gum
+        vendor = new Vending(10, 10);
     }
 
     @Test
@@ -37,11 +37,18 @@ public class VendorTest {
         assertEquals(15, candy.stock);
     }
 
-    // New test for adding unavailable items
     @Test
     void testAddNewItemToInventory() {
         vendor.restockItem("Chips", 1.00, 5);
         assertTrue(vendor.getStock().containsKey("Chips"));
         assertEquals(5, vendor.getStock().get("Chips").stock);
+    }
+
+    // New test for renaming items
+    @Test
+    void testRenameItem() {
+        vendor.renameItem("Candy", "Chocolate");
+        assertNull(vendor.getStock().get("Candy"));
+        assertNotNull(vendor.getStock().get("Chocolate"));
     }
 }

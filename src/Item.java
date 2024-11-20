@@ -1,4 +1,6 @@
+
 class Item {
+    String name;   // Added name property
     double price;
     int stock;
 
@@ -13,5 +15,14 @@ class Item {
 
     void purchase(int amount) {
         this.stock = this.stock - amount;
+    }
+
+    // Added for renaming
+    void setName(String name) {
+        this.name = name;
+    }
+
+    String getName() {
+        return name;
     }
 }

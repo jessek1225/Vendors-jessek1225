@@ -46,13 +46,21 @@ class Vending {
         }
     }
 
-    // New method to add and restock items
     void restockItem(String name, double price, int amount) {
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
             item.restock(amount);
         } else {
             Stock.put(name, new Item(price, amount));
+        }
+    }
+
+    // Added method to rename items
+    void renameItem(String oldName, String newName) {
+        if (Stock.containsKey(oldName)) {
+            Item item = Stock.get(oldName);
+            Stock.remove(oldName);
+            Stock.put(newName, item);
         }
     }
 
