@@ -1,4 +1,3 @@
-// Vending.java
 import java.util.HashMap;
 
 class Vending {
@@ -44,6 +43,16 @@ class Vending {
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
             item.restock(amount);
+        }
+    }
+
+    // New method to add and restock items
+    void restockItem(String name, double price, int amount) {
+        if (Stock.containsKey(name)) {
+            Item item = Stock.get(name);
+            item.restock(amount);
+        } else {
+            Stock.put(name, new Item(price, amount));
         }
     }
 
