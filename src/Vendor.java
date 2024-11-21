@@ -27,12 +27,16 @@ class Vendor {
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
             double currentPrice = item.getCurrentPrice();
-            if (balance >= currentPrice) {
+            if (balance >= currentPrice && item.stock > 0) {
                 item.purchase(1);
                 this.balance = this.balance - currentPrice;
             }
-            else
+            else if (item.stock <= 0) {
+                System.out.println("Item out of stock");
+            }
+            else {
                 System.out.println("Insufficient funds");
+            }
         }
         else System.out.println("Item not found");
     }
@@ -86,6 +90,7 @@ class Vendor {
     }
 
     void printInventory() {
+        System.out.println("\nCurrent Inventory:");
         for (String itemName : Stock.keySet()) {
             Item item = Stock.get(itemName);
             System.out.printf("%s - Stock: %d - Price: $%.2f - Sold: %d",
