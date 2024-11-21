@@ -85,6 +85,21 @@ class Vendor {
         }
     }
 
+    void printInventory() {
+        for (String itemName : Stock.keySet()) {
+            Item item = Stock.get(itemName);
+            System.out.printf("%s - Stock: %d - Price: $%.2f - Sold: %d",
+                    itemName, item.stock, item.getCurrentPrice(), item.getPurchaseCount());
+            if (item.isBestseller) {
+                System.out.print(" [BESTSELLER]");
+            }
+            if (item.discountPercentage > 0) {
+                System.out.printf(" (%.0f%% OFF)", item.discountPercentage);
+            }
+            System.out.println("\nDescription: " + item.getDescription());
+        }
+    }
+
     HashMap<String, Item> getStock() {
         return Stock;
     }
